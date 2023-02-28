@@ -1,0 +1,23 @@
+Connect to Mongo via Tunnel --> LOW
+Deploy Operational Console via webhook & pipeline - DONE
+
+New code deployment - OTEL services and springboot-kafka - IN-PROGRESS
+Dockerfile and Compose --> HIGH
+
+updated AEH Perf excel --> HIGH
+Security Issues --> OK
+SSM updates --> HIGH
+
+Configure CDC - Postman --> LOW
+Transfer data windows to Mac --> LOW
+Birth Cert
+
+ELB - Not working - Revert
+
+Push Updated java Code
+
+
+
+Login not working - Neetin - Fixed
+Fix /addTransactions issues - FIXED
+SG issues

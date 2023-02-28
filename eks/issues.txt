@@ -1,0 +1,40 @@
+##  AWS Env Issues and Learnings
+###########
+1. Storage Classes should be gp2 and should be created - This might cause issues with provisioning PV
+2. If account level SCP has explicit deny for UnEncrypted EBS volumes then storage class should have "encrypted"=true. to allow PVC to create volume
+3. AWS CSI driver node health should be good and service account role of kube-system should be same as the one that has permission to create EBS volume
+4. If PV, PVC is stuck in terminating status - PVC should be deleted first and the PV. If PVC is stuck then edit that PVC yaml and remove finalizer then run below command.
+kubectl delete pv pvc-cae3a766-41eb-4317-8de1-04e6b7291ea9 -n springboot-kafka --grace-period=0 --force
+
+5. If any unauthorized access issue in kubectl get events or CloudTrail - run below to decode the Message
+aws sts decode-authorization-message --encoded-message 'EncryptedError' 
+
+6. If AWS ELB isnt getting created via kubectl service type LoadBalancer - Create a loadbalancer controller Service account and a POD along with Trust Policy for OIDC Provider AssumeWebIdentity for LoadBalancer Controller Service account
+
+7. Unable to delete a SVC ELB
+kubectl patch svc keycloak1 -n springboot-kafka -p '{"metadata":{"finalizers":null}}'
+
+8. Delete unhealthy nodes.
+kubectl drain --ignore-daemonsets <node name>
+
+kubectl drain --ignore-daemonsets ip-192-168-87-117.ap-south-1.compute.internal
+
+## Perf Test Learnings.
+1. Limited control in Bitnami Helm for Kafka, can be overriden by --set parameter for helm or apply custom values
+2. Prefer Strimzi Kafka which is a more matured version and has useful documentation and easy customization. 
+3. Kafka has by default auto.create.topic.enable=true. This needs to be overrriden in Kafka Properties.
+4. To scale consumers no of partitions for a topic should be >= to no of consumers needed
+
+
+
+Other Considerations
+1. Scaling mongodb
+2. Adding configs for all Kafka brokers
+3. Grafana Dashboard issues
+4. Prepare Kafka Scaling and Prod Params
+5. Fix Ingress Issues
+6. HPA, Resource Quotas
+7. Security, Perf and NodeAffinity
+8. How to decide Horizontal vs Vertical Scaling. 
+9. Architecture with Total size and size given to each POD
+9. PPT - Scaling of each service, Observations and Bench marks
